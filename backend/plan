@@ -1,0 +1,21 @@
+-create basic Server
+
+-database
+
+-create models
+  -user model
+  -device model
+
+-create user routes
+  -new user
+  -find single user
+  -update user
+  -find all users
+  -delete user
+
+-create device routes
+  -new device
+  -find device
+  -find all devices with user id
+  -edit device //location only
+  -delete device
