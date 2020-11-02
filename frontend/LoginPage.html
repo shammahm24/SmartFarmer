@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SmartFarmer</title>
+    <script src="Scripts/jquery-3.5.1.js"></script>
+  
+        <style>
+            h1 {
+                color:white;
+            }
+
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                text-align: center;
+                background-image: url('Images/Background_img.png');
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            form {
+                display: inline-block;
+            }
+
+            /* Add padding to containers */
+            .container {
+                padding: 25px;
+                background-color: white;
+                width: 500px;
+            }
+
+            /*Full-width input fields*/
+            input[type=text], input[type=password] {
+                width: 100%;
+                padding: 15px;
+                margin: 5px 0 22px 0;
+                display: inline-block;
+                border: 2px solid green;
+                background: #f1f1f1;
+            }
+
+                input[type=text]:focus, input[type=password]:focus {
+                background-color: #ddd;
+                    outline: none;
+                }
+
+            /* Overwrite default styles of hr */
+            hr {
+                border: 1px solid #f1f1f1;
+                margin-bottom: 25px;
+            }
+
+            /* Set a style for the submit button */
+            .Loginbtn {
+                background-color: green;
+                color: white;
+                padding: 16px 20px;
+                margin: 8px 0;
+                border: none;
+                cursor: pointer;
+                width: 100%;
+                opacity: 0.9;
+            }
+
+                .Loginbtn:hover {
+                opacity: 1;
+                }
+
+            /* Add a blue text color to links */
+            a {
+                color: dodgerblue;
+            }
+
+            /* Set a grey background color and center the text of the "sign in" section */
+            .signin {
+                background-color: #f1f1f1;
+                text-align: center;
+            }
+        </style>
+
+        <script>
+
+        </script>
+
+</head>
+<body>
+
+    <h1> Welcome to SmartFarmer </h1>
+
+    <form name="LoginForm">
+        <div class="container">
+            <h2>Login</h2>
+
+            <p>Please enter your email address and password to login.</p>
+
+            <hr>
+            <label for="email"><b>Email</b></label>
+            <input type="text" placeholder="Enter Email" name="email" id="email" required>
+            
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
+            <hr>
+
+            <input type="button" name="Loginbtn" class="Loginbtn" value="Login" />
+        </div>
+
+        <div class="container signin">
+            <p>Don't have an account? <a href="RegisterPage.html">Register here</a>.</p>
+        </div>
+    </form>
+
+</body>
+</html>

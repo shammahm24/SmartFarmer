@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>SmartFarmer</title>
+    <script src="Scripts/jquery-3.5.1.js"></script>
+
+    <style>
+
+    </style>
+</head>
+
+ <script>
+    $(function () {
+
+        //Check to see if email already exist
+        var email_state = false;
+        $("input[name=email]").blur(function () {
+            var email = $("input[name=email]").val();
+
+            if (email == '') {
+                email_state = false;
+                return;
+            }
+            $.ajax({
+                url: 'https://sfarmer.herokuapp.com/signup',
+                type: 'POST',
+                data: {
+                    "email": email,
+                },
+                success: function (data) {
+                    if (data == 'taken') {
+                        email_state = false;
+                        $("input[name=email]").parent().removeClass();
+                        $("input[name=email]").parent().addClass("form_error");
+                        $("input[name=email]").siblings("span").text('Sorry...Email already taken');
+                    }
+                    else if (data == 'not_taken') {
+                        email_state = true;
+                        $("input[name=email]").parent().removeClass();
+                        $("input[name=email]").parent.addClass("form_success");
+                        $("input[name=email]").siblings("span").text("Email available");
+                    }
+                }
+            });
+        });
+
+        //OnClick event for Register button
+        $("input[name=registerbtn]").click(function () {
+            var firstName = $("input[name=FirstName]").val();
+            var lastName = $("input[name=LastName]").val();
+            var email = $("input[name=email]").val();
+            var password = $("input[name=psw]").val();
+
+            if (email_state == false) {
+                $('#error_msg').text('Fix the errors in the form first')
+            }
+            else {
+                //proceed with form submission
+                $.ajax({
+                    url: '',
+                    type: 'POST',
+                    data: {
+                        'firstName': firstName,
+                        'lastName': lastName,
+                        'email': email,
+                        'password': password,
+                    },
+                    success: function (data) {
+                        console.log("Successs");
+                        //alert('user saved');
+                        $("input[name=FirstName]").val('');
+                        $("input[name=LastName]").val('');
+                        $("input[name=email]").val('');
+                        $("input[name=psw]").val('');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<body>
+
+</body>
+</html>
