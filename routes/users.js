@@ -23,7 +23,7 @@ router.get('/',(req,res,next)=>{
   var url_parts = req.protocol + '://' + req.get('host') + req.originalUrl;
   console.log(url_parts);
   console.log("Connected to get all route")
-  User.find().select('firstName lastName email _id').exec().then(docs=>{
+  User.find().select('firstName lastName email _id devices').exec().then(docs=>{
       console.log(docs);
       const response={
         count:docs.length,
@@ -32,6 +32,7 @@ router.get('/',(req,res,next)=>{
             firstName:doc.firstName,
             lastName:doc.lastName,
             email:doc.email,
+            devices:doc.devices,
             _id:doc._id,
             requests:{
               type:'GET',
@@ -61,7 +62,7 @@ router.get('/:userId',checkAuth,(req,res,next)=>{
   var url_parts = req.protocol + '://' + req.get('host') + req.originalUrl;
   const id=req.params.userId;
   User.findById(id)
-  .select('firstName lastName _id email')
+  .select('firstName lastName _id email devices')
   .exec()
   .then(doc=>{
     console.log("From Database",doc);
@@ -186,7 +187,8 @@ const { errors, isValid } = validateLoginInput(req.body);
           );
               return res.status(200).json({
                 message:'Auth successful',
-                token:token
+                token:token,
+                payload:payload
               });
           }
           else{

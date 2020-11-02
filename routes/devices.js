@@ -8,16 +8,16 @@ const checkAuth=require('../middleware/check-auth');
 const hosturl= "req.protocol + '://' + req.get('host') + req.originalUrl";
 
 const Device=require('../models/device');
-
+const User=require('../models/user');
 
 
 router.post('/',(req,res,next)=>{
+  id=req.body.userID
   const device=new Device({
     _id:new mongoose.Types.ObjectId(),
     deviceName:req.body.deviceName,
     deviceZipCode:req.body.deviceZipCode, //this user id is supposed to come from the login session
     //the user id is supposed to be stored on the device after login and that will be the one used here
-
   });
   device.save()
   .then(result=>{
@@ -32,6 +32,25 @@ router.post('/',(req,res,next)=>{
       error:err
     })
   });
+
+  //update user with new device
+  User.update({_id:id},{$push:{devices:req.body.deviceName}}).exec().then(result=>{
+    console.log(result);
+    res.status(200).json({
+      message:'User updated with new device',
+      request:{
+        type:'GET',
+        url:encodeURI(`${eval(url)}` +id)
+      }
+    });
+  })
+  .catch(err=>{
+    console.log(err);
+    res.status(500).json({
+      error:err
+    });
+  });
+
 });
 
 
