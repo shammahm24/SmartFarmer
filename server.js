@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true}));
 
 const userRoutes=require('./routes/users');
 const deviceRoutes=require('./routes/devices');
-
+const apiRoutes=require('./routes/weather');
 
 require('dotenv').config();
  port=process.env.PORT;
@@ -50,6 +50,7 @@ app.get('/',(req, res)=>res.json({message: 'Hello Farmer'}))
 
 app.use('/user',userRoutes);
 app.use('/device',deviceRoutes);
+app.use('/api',apiRoutes);
 
 //error routes
 app.use((req,res,next)=>{
