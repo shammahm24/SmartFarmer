@@ -1,5 +1,6 @@
 const express=require('express');
 const router=express.Router();
+const fetch = require('node-fetch');
 const mongoose=require('mongoose');
 const http=require("http");
 var url  = require('url');
@@ -101,12 +102,12 @@ router.patch('/:deviceName',checkAuth,(req,res,next)=>{
 router.get('/',(req,res,next)=>{
   var url_parts = req.protocol + '://' + req.get('host') + req.originalUrl;
   console.log(url_parts);
-  console.log("Connected to get all builds route")
+  console.log("Connected to get all devicess route")
   Device.find().select('_id deviceName deviceZipCode').exec().then(docs=>{
       console.log(docs);
       const response={
         count:docs.length,
-        builds:docs.map(doc=>{
+        devicess:docs.map(doc=>{
           return{
             id:doc._id,
             deviceName:doc.deviceName,
@@ -137,22 +138,32 @@ router.get('/',(req,res,next)=>{
 
 //get specif build
 //used when checking a specific build browsing through build details and the images
-router.get('/:deviceName',checkAuth,(req,res,next)=>{
+let zip_code="";
+
+router.get('/:deviceName',(req,res,next)=>{
   const name=req.params.deviceName;
-  Build.findById({deviceName:name})
+  Device.find({deviceName:name})
   .select('_id deviceName deviceZipCode')
   .exec()
   .then(doc=>{
+
     console.log("From Database",doc);
     if(doc){
-    res.status(200).json({
-      build:doc,
+      //res.status(200).send(doc[0]["deviceZipCode"])
+      zip_code=doc[0]["deviceZipCode"];
+      //console.log(doc[0]["deviceZipCode"]);
+    /*res.status(200).json({
+      device:doc,
       request:{
         type:'GET',
         description:'Get all Devices',
         url:encodeURI(`${eval(url)}`)
       }
-    });
+    });*/
+
+get_data(zip_code);
+
+
   }else{
     res.status(404).json({
       message:"no valid name found"
@@ -163,6 +174,30 @@ router.get('/:deviceName',checkAuth,(req,res,next)=>{
     console.log(err);
     res.status(500).json({error:err});
   });
+
+  //const url =process.env.WEATHER_API+`${zip_code}`;
+
+
+  const get_data = async zip_code => {
+      const url =process.env.WEATHER_API+`${zip_code}`;
+    try {
+      const response = await fetch(url);
+      const json = await response.json();
+
+      console.log(url);
+      res.status(200).json({
+        city:json.location.name,
+        condition:json.current.condition.text,
+        icon:json.current.condition.icon
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  //get_data(code);
+
 });
 
 
